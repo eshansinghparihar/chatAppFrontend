@@ -27,7 +27,7 @@ function Conversation({ convo, socket, online, typing }) {
     <li
       onClick={() => openConversation()}
       className={`list-none h-[72px] w-full dark:bg-dark_bg_1 hover:${
-        convo._id !== activeConversation._id ? "dark:bg-dark_bg_2" : ""
+        convo._id !== activeConversation._id ? "dark:bg-dark_bg_6" : ""
       } cursor-pointer dark:text-dark_text_1 px-[10px] ${
         convo._id === activeConversation._id ? "dark:bg-dark_hover_1" : ""
       }`}

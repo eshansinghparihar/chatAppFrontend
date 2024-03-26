@@ -9,6 +9,7 @@ function Contact({ contact, setSearchResults, socket }) {
   const values = {
     receiver_id: contact._id,
     token,
+    isGroup:false
   };
   const openConversation = async () => {
     let newConvo = await dispatch(open_create_conversation(values));
@@ -17,7 +18,7 @@ function Contact({ contact, setSearchResults, socket }) {
   return (
     <li
       onClick={() => openConversation()}
-      className="list-none h-[72px] hover:dark:bg-dark_bg_2 cursor-pointer dark:text-dark_text_1 px-[10px]"
+      className="list-none h-[72px] hover:dark:bg-dark_bg_6 cursor-pointer dark:text-dark_text_1 px-[10px]"
     >
       {/*Container*/}
       <div className="flex items-center gap-x-3 py-[10px]">

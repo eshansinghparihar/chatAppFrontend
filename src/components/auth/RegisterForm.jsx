@@ -57,7 +57,7 @@ export default function RegisterForm() {
   return (
     <div className="min-h-screen w-full flex items-center justify-center overflow-hidden">
       {/* Container */}
-      <div className="w-full max-w-md space-y-8 p-10 dark:bg-dark_bg_2 rounded-xl">
+      <div className="w-full max-w-md space-y-8 p-10 dark:bg-dark_bg_6 rounded-xl">
         {/*Heading*/}
         <div className="text-center dark:text-dark_text_1">
           <h2 className="mt-6 text-3xl font-bold">Welcome</h2>
@@ -107,8 +107,8 @@ export default function RegisterForm() {
           ) : null}
           {/*Submit button*/}
           <button
-            className="w-full flex justify-center bg-green_1 text-gray-100 p-4 rounded-full tracking-wide
-          font-semibold focus:outline-none hover:bg-green_2 shadow-lg cursor-pointer transition ease-in duration-300
+            className="w-full flex justify-center bg-blue-700 text-gray-100 p-4 rounded-full tracking-wide
+          font-semibold focus:outline-none hover:bg-blue_1 shadow-lg cursor-pointer transition ease-in duration-300
           "
             type="submit"
           >

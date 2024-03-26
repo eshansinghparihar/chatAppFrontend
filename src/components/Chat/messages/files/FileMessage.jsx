@@ -26,11 +26,11 @@ export default function FileMessage({ FileMessage, message, me }) {
 
         <div
           className={`relative h-full dark:text-dark_text_1 rounded-lg
-        ${me ? " border border-green_3" : "dark:bg-dark_bg_2"}
+        ${me ? " border border-green_3" : "dark:bg-dark_bg_6"}
         ${
           me && file.public_id.split(".")[1] === "png"
             ? "bg-white"
-            : "bg-green_3 p-1"
+            : "bg-blue-700 p-1"
         }
         `}
         >

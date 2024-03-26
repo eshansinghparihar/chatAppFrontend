@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Conversations } from "./conversations";
 import { SidebarHeader } from "./header";
-import { Notifications } from "./notifications";
 import { Search } from "./search";
 import { SearchResults } from "./search";
 
@@ -11,13 +10,11 @@ export default function Sidebar({ onlineUsers, typing }) {
     <div className="flex0030 max-w-[30%] h-full select-none">
       {/*Sidebar Header*/}
       <SidebarHeader />
-      {/*Notifications */}
-      <Notifications />
       {/*Search*/}
-      <Search
+      <div className="mt-2"><Search
         searchLength={searchResults.length}
         setSearchResults={setSearchResults}
-      />
+      /></div>
       {searchResults.length > 0 ? (
         <>
           {/*Search results*/}
@@ -29,7 +26,8 @@ export default function Sidebar({ onlineUsers, typing }) {
       ) : (
         <>
           {/*Conversations*/}
-          <Conversations onlineUsers={onlineUsers} typing={typing} />
+          <div className="mt-2"><Conversations onlineUsers={onlineUsers} typing={typing} /></div>
+          
         </>
       )}
     </div>

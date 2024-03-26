@@ -1,8 +1,5 @@
 import { useSelector } from "react-redux";
 import {
-  CallIcon,
-  DotsIcon,
-  SearchLargeIcon,
   VideoCallIcon,
 } from "../../../svg";
 import { capitalize } from "../../../utils/string";
@@ -18,7 +15,7 @@ function ChatHeader({ online, callUser, socket }) {
   const { user } = useSelector((state) => state.user);
 
   return (
-    <div className="h-[59px] dark:bg-dark_bg_2 flex items-center p16 select-none">
+    <div className="h-[59px] dark:bg-dark_bg_6 flex items-center p16 select-none">
       {/*Container*/}
       <div className="w-full flex items-center justify-between">
         {/*left*/}
@@ -60,23 +57,6 @@ function ChatHeader({ online, callUser, socket }) {
               </button>
             </li>
           ) : null}
-          {1 == 1 ? (
-            <li>
-              <button className="btn">
-                <CallIcon />
-              </button>
-            </li>
-          ) : null}
-          <li>
-            <button className="btn">
-              <SearchLargeIcon className="dark:fill-dark_svg_1" />
-            </button>
-          </li>
-          <li>
-            <button className="btn">
-              <DotsIcon className="dark:fill-dark_svg_1" />
-            </button>
-          </li>
         </ul>
       </div>
     </div>

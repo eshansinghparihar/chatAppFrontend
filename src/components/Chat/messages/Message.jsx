@@ -22,7 +22,7 @@ export default function Message({ message, me }) {
         )}
         <div
           className={`relative h-full dark:text-dark_text_1 p-2 rounded-lg
-        ${me ? "bg-green_3" : "dark:bg-dark_bg_2"}
+        ${me ? "bg-blue-700" : "dark:bg-dark_bg_6"}
         `}
         >
           {/*Message*/}

@@ -16,7 +16,7 @@ export default function ChatMessages({ typing }) {
   };
   return (
     <div
-      className="mb-[60px] bg-[url('https://res.cloudinary.com/dmhcnhtng/image/upload/v1677358270/Untitled-1_copy_rpx8yb.jpg')]
+      className="mb-[60px] bg-dark_bg_3
     bg-cover bg-no-repeat
     "
     >
@@ -25,7 +25,7 @@ export default function ChatMessages({ typing }) {
         {/*Messages*/}
         {messages &&
           messages.map((message) => (
-            <>
+            <div key={message._id}>
               {/*Message files */}
               {message.files.length > 0
                 ? message.files.map((file) => (
@@ -45,7 +45,7 @@ export default function ChatMessages({ typing }) {
                   me={user._id === message.sender._id}
                 />
               ) : null}
-            </>
+            </div>
           ))}
         {typing === activeConversation._id ? <Typing /> : null}
         <div className="mt-2" ref={endRef}></div>
