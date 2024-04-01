@@ -1,15 +1,20 @@
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signInSchema } from "../../utils/validation";
 import AuthInput from "./AuthInput";
 import { useDispatch, useSelector } from "react-redux";
 import PulseLoader from "react-spinners/PulseLoader";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../../features/userSlice";
+import { loginUser, loginGoogleUser } from "../../features/userSlice";
+import { useGoogleLogin, use } from "@react-oauth/google";
+import axios from "axios";
 export default function RegisterForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { status, error } = useSelector((state) => state.user);
+  const { state, err } = useSelector((state) => state);
+  useEffect(() => {}, []);
   const {
     register,
     handleSubmit,
@@ -24,6 +29,18 @@ export default function RegisterForm() {
       navigate("/");
     }
   };
+
+  async function handleGoogleLoginSuccess(tokenResponse) {
+    const accessToken = tokenResponse.access_token;
+    let res = await dispatch(loginGoogleUser(accessToken));
+    console.log(res);
+    if (res?.payload?.user) {
+      navigate("/");
+    }
+  }
+
+  const login = useGoogleLogin({ onSuccess: handleGoogleLoginSuccess });
+
   return (
     <div className="min-h-screen w-full flex items-center justify-center overflow-hidden">
       {/* Container */}
@@ -38,14 +55,14 @@ export default function RegisterForm() {
           <AuthInput
             name="email"
             type="text"
-            placeholder="Email address"
+            placeholder={["Email address", ""]}
             register={register}
             error={errors?.email?.message}
           />
           <AuthInput
             name="password"
             type="password"
-            placeholder="Password"
+            placeholder={["Password", ""]}
             register={register}
             error={errors?.password?.message}
           />
@@ -69,6 +86,14 @@ export default function RegisterForm() {
               "Sign in"
             )}
           </button>
+          <button
+            className="login-with-google-btn w-full flex justify-center bg-blue-700 text-gray-100 p-4 rounded-full tracking-wide
+          font-semibold focus:outline-none hover:bg-blue_1 shadow-lg cursor-pointer transition ease-in duration-300"
+            onClick={login}
+            type="button"
+          >
+            Sign In With Google
+          </button>
           {/* Sign in link */}
           <p className="flex flex-col items-center justify-center mt-10 text-center text-md dark:text-dark_text_1">
             <span>you do not have an account ?</span>
@@ -79,6 +104,11 @@ export default function RegisterForm() {
               Sign up
             </Link>
           </p>
+          {status == "failed" ? (
+            <p className="text-red-500 text-center">{state}</p>
+          ) : (
+            <p className="text-red-50 text-center"></p>
+          )}
         </form>
       </div>
     </div>

@@ -29,6 +29,43 @@ export const registerUser = createAsyncThunk(
     }
   }
 );
+
+export const registerGoogle = createAsyncThunk(
+  "auth/registerGoogle",
+  async (values, { rejectWithValue }) => {
+    console.log("values", values);
+    const googleAccessToken = {
+      googleAccessToken: values,
+    };
+    try {
+      const { data } = await axios.post(`${AUTH_ENDPOINT}/register`, {
+        googleAccessToken,
+      });
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.log(error.response.data.message);
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const updateUser = createAsyncThunk(
+  "auth/update",
+  async (values, { rejectWithValue }) => {
+    console.log(values);
+    try {
+      const { data } = await axios.patch(`${AUTH_ENDPOINT}/update`, {
+        ...values,
+      });
+      console.log(data);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response.data.error.message);
+    }
+  }
+);
+
 export const loginUser = createAsyncThunk(
   "auth/login",
   async (values, { rejectWithValue }) => {
@@ -39,6 +76,24 @@ export const loginUser = createAsyncThunk(
       return data;
     } catch (error) {
       return rejectWithValue(error.response.data.error.message);
+    }
+  }
+);
+
+export const loginGoogleUser = createAsyncThunk(
+  "auth/loginGoogle",
+  async (values, { rejectWithValue }) => {
+    const googleAccessToken = {
+      googleAccessToken: values,
+    };
+    try {
+      const { data } = await axios.post(`${AUTH_ENDPOINT}/login`, {
+        googleAccessToken,
+      });
+      return data;
+    } catch (error) {
+      console.log(error.response.data.message);
+      return rejectWithValue(error.response.data.message);
     }
   }
 );
@@ -86,6 +141,45 @@ export const userSlice = createSlice({
         state.user = action.payload.user;
       })
       .addCase(loginUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(updateUser.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = "";
+        state.user = action.payload.user;
+        console.log(action.payload.user);
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(registerGoogle.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(registerGoogle.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = "";
+        state.user = action.payload.user;
+        console.log(action.payload.user);
+      })
+      .addCase(registerGoogle.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(loginGoogleUser.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(loginGoogleUser.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = "";
+        state.user = action.payload.user;
+        console.log(action.payload.user);
+      })
+      .addCase(loginGoogleUser.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       });

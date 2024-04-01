@@ -3,10 +3,15 @@ import {  DotsIcon,  } from "../../../svg";
 import { useState } from "react";
 import Menu from "./Menu";
 import { CreateGroup } from "./createGroup";
+import {WhatsappHome} from "../../Chat"
+import { Link, useNavigate } from "react-router-dom";
 export default function SidebarHeader() {
   const { user } = useSelector((state) => state.user);
   const [showMenu, setShowMenu] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
   const [showCreateGroup, setShowCreateGroup] = useState(false);
+  const navigate = useNavigate();
+
   return (
     <>
       {/*Sidebar header*/}
@@ -14,7 +19,7 @@ export default function SidebarHeader() {
         {/* container */}
         <div className="w-full flex items-center justify-between">
           {/*user image*/}
-          <button className="btn">
+          <button className="btn" onClick={()=>navigate("/profile")}>
             <img
               src={user.picture}
               alt={user.name}

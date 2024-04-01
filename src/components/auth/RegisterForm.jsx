@@ -5,7 +5,13 @@ import AuthInput from "./AuthInput";
 import { useDispatch, useSelector } from "react-redux";
 import PulseLoader from "react-spinners/PulseLoader";
 import { Link, useNavigate } from "react-router-dom";
-import { changeStatus, registerUser } from "../../features/userSlice";
+import { useGoogleLogin, use } from "@react-oauth/google";
+
+import {
+  changeStatus,
+  registerUser,
+  registerGoogle,
+} from "../../features/userSlice";
 import { useState } from "react";
 import Picture from "./Picture";
 import axios from "axios";
@@ -15,6 +21,7 @@ export default function RegisterForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { status, error } = useSelector((state) => state.user);
+  const { state, err } = useSelector((state) => state);
   const [picture, setPicture] = useState();
   const [readablePicture, setReadablePicture] = useState("");
   const {
@@ -25,7 +32,20 @@ export default function RegisterForm() {
   } = useForm({
     resolver: yupResolver(signUpSchema),
   });
+
+  async function handleGoogleLoginSuccess(tokenResponse) {
+    const accessToken = tokenResponse.access_token;
+
+    let res = await dispatch(registerGoogle(accessToken, navigate));
+    if (res?.payload?.user) {
+      navigate("/");
+    }
+  }
+
+  const login = useGoogleLogin({ onSuccess: handleGoogleLoginSuccess });
+
   const onSubmit = async (data) => {
+    data.preventDefault();
     dispatch(changeStatus("loading"));
     if (picture) {
       //upload to cloudinary and then register user
@@ -68,28 +88,28 @@ export default function RegisterForm() {
           <AuthInput
             name="name"
             type="text"
-            placeholder="Full Name"
+            placeholder={["Full Name", ""]}
             register={register}
             error={errors?.name?.message}
           />
           <AuthInput
             name="email"
             type="text"
-            placeholder="Email address"
+            placeholder={["Email address", ""]}
             register={register}
             error={errors?.email?.message}
           />
           <AuthInput
             name="status"
             type="text"
-            placeholder="Status (Optional)"
+            placeholder={["Status (Optional)", ""]}
             register={register}
             error={errors?.status?.message}
           />
           <AuthInput
             name="password"
             type="password"
-            placeholder="Password"
+            placeholder={["Password", ""]}
             register={register}
             error={errors?.password?.message}
           />
@@ -118,6 +138,14 @@ export default function RegisterForm() {
               "Sign up"
             )}
           </button>
+          <button
+            className="login-with-google-btn w-full flex justify-center bg-blue-700 text-gray-100 p-4 rounded-full tracking-wide
+          font-semibold focus:outline-none hover:bg-blue_1 shadow-lg cursor-pointer transition ease-in duration-300"
+            onClick={login}
+            type="button"
+          >
+            Sign Up With Google
+          </button>
           {/* Sign in link */}
           <p className="flex flex-col items-center justify-center mt-10 text-center text-md dark:text-dark_text_1">
             <span>have an account ?</span>
@@ -128,6 +156,11 @@ export default function RegisterForm() {
               Sign in
             </Link>
           </p>
+          {status == "failed" ? (
+            <p className="text-red-500 text-center">{state}</p>
+          ) : (
+            <p className="text-red-50 text-center"></p>
+          )}
         </form>
       </div>
     </div>
