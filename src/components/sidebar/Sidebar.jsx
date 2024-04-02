@@ -11,10 +11,12 @@ export default function Sidebar({ onlineUsers, typing }) {
       {/*Sidebar Header*/}
       <SidebarHeader />
       {/*Search*/}
-      <div className="mt-2"><Search
-        searchLength={searchResults.length}
-        setSearchResults={setSearchResults}
-      /></div>
+      <div className="mt-2">
+        <Search
+          searchLength={searchResults.length}
+          setSearchResults={setSearchResults}
+        />
+      </div>
       {searchResults.length > 0 ? (
         <>
           {/*Search results*/}
@@ -26,8 +28,9 @@ export default function Sidebar({ onlineUsers, typing }) {
       ) : (
         <>
           {/*Conversations*/}
-          <div className="mt-2"><Conversations onlineUsers={onlineUsers} typing={typing} /></div>
-          
+          <div className="mt-2">
+            <Conversations onlineUsers={onlineUsers} typing={typing} />
+          </div>
         </>
       )}
     </div>

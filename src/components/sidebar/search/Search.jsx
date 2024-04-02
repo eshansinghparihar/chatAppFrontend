@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import {  ReturnIcon, SearchIcon } from "../../../svg";
+import { ReturnIcon, SearchIcon } from "../../../svg";
 
 export default function Search({ searchLength, setSearchResults }) {
   const { user } = useSelector((state) => state.user);
@@ -32,7 +32,7 @@ export default function Search({ searchLength, setSearchResults }) {
       <div className="px-[10px]">
         {/*Search input container*/}
         <div className="flex items-center gap-x-2">
-          <div className="w-full flex dark:bg-dark_bg_6 rounded-lg pl-2">
+          <div className="w-full flex dark:bg-dark_bg_4 rounded-lg pl-2">
             {show || searchLength > 0 ? (
               <span
                 className="w-8 flex items-center justify-center rotateAnimation cursor-pointer"
@@ -48,13 +48,12 @@ export default function Search({ searchLength, setSearchResults }) {
             <input
               type="text"
               placeholder="Search or start a new chat"
-              className="input"
+              className="input dark:bg-dark_bg_5"
               onFocus={() => setShow(true)}
               onBlur={() => searchLength == 0 && setShow(false)}
               onKeyDown={(e) => handleSearch(e)}
             />
           </div>
-
         </div>
       </div>
     </div>

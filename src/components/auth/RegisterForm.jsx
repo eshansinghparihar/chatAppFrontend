@@ -45,7 +45,6 @@ export default function RegisterForm() {
   const login = useGoogleLogin({ onSuccess: handleGoogleLoginSuccess });
 
   const onSubmit = async (data) => {
-    data.preventDefault();
     dispatch(changeStatus("loading"));
     if (picture) {
       //upload to cloudinary and then register user

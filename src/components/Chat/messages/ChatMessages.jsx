@@ -25,7 +25,7 @@ export default function ChatMessages({ typing }) {
         {/*Messages*/}
         {messages &&
           messages.map((message) => (
-            <div key={message._id}>
+            <div>
               {/*Message files */}
               {message.files.length > 0
                 ? message.files.map((file) => (

@@ -37,18 +37,18 @@ export default function Picture({
   return (
     <div className="mt-8 content-center dark:text-dark_text_1 space-y-1">
       <label htmlFor="picture" className="text-sm font-bold tracking-wide">
-        Picture (Optional)
+        Pic
       </label>
       {readablePicture ? (
         <div>
           <img
             src={readablePicture}
             alt="picture"
-            className="w-20 h-20 object-cover rounded-full"
+            className="w-64 h-64 object-cover rounded-full items-center"
           />
           {/* change pic */}
           <div
-            className="mt-2 w-20 py-1 dark:bg-dark_bg_3 rounded-md text-xs font-bold flex items-center justify-center cursor-pointer"
+            className="mt-5 h-10 w-64 py-1 dark:bg-dark_bg_3 text-red-400 rounded-md text-xs font-bold flex items-center justify-center cursor-pointer"
             onClick={() => handleChangePic()}
           >
             Remove

@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
-import {  DotsIcon,  } from "../../../svg";
+import { DotsIcon } from "../../../svg";
 import { useState } from "react";
 import Menu from "./Menu";
 import { CreateGroup } from "./createGroup";
-import {WhatsappHome} from "../../Chat"
+import { WhatsappHome } from "../../Chat";
 import { Link, useNavigate } from "react-router-dom";
 export default function SidebarHeader() {
   const { user } = useSelector((state) => state.user);
@@ -15,11 +15,11 @@ export default function SidebarHeader() {
   return (
     <>
       {/*Sidebar header*/}
-      <div className="h-[50px] dark:bg-dark_bg_6 flex items-center p16">
+      <div className="h-[50px] dark:bg-dark_bg_6 flex items-center p16 ">
         {/* container */}
-        <div className="w-full flex items-center justify-between">
+        <div className="w-full flex-row items-center justify-between md:flex">
           {/*user image*/}
-          <button className="btn" onClick={()=>navigate("/profile")}>
+          <button className="btn" onClick={() => navigate("/profile")}>
             <img
               src={user.picture}
               alt={user.name}

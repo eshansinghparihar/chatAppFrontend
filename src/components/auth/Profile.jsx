@@ -24,7 +24,7 @@ function Profile() {
 
   const { status, error } = useSelector((state) => state.user);
   const [picture, setPicture] = useState();
-  const [readablePicture, setReadablePicture] = useState("");
+  const [readablePicture, setReadablePicture] = useState(user.picture);
   const [ChangePass, setChangePass] = useState(false);
 
   const {
@@ -72,22 +72,24 @@ function Profile() {
   };
 
   return (
-    <div className="min-h-screen w-full flex justify-center overflow-hidden">
+    <div className="min-h-screen w-full flex justify-center overflow-hidden ">
       {/* Container */}
-      <div className=" w-full max-w-md space-y-2 p-2 dark:bg-dark_bg_6 rounded-xl">
+      <div className=" w-full max-w-md space-y-2 p-2 dark:bg-dark_bg_6 rounded-xl ">
         {/*Heading*/}
-        <div className="text-center dark:text-dark_text_1">
+        <div className="text-center dark:text-dark_text_1 ">
           <h2 className=" text-3xl font-bold">Profile</h2>
-          <div className=" mt-5 items-center justify-center"></div>
-          <div className="mx-auto w-64 text-center ">
-            <div class=" w-64">
-              <img
-                class="w-64 h-64 rounded-full"
-                src={user.picture}
-                alt={user.name}
-              />
-            </div>
-            <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-6">
+          <div className=" mt-5 items-center justify-center " />
+          <div className="mx-auto w-64 text-center  ">
+            {/* Picture */}
+            <Picture
+              readablePicture={readablePicture}
+              setReadablePicture={setReadablePicture}
+              setPicture={setPicture}
+            />
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className=" mt-6 space-y-6 "
+            >
               <AuthInput
                 name="name"
                 type="text"
@@ -112,32 +114,49 @@ function Profile() {
                 register={register}
                 error={errors?.status?.message}
               />
-              <label>
-                <input
-                  className="mr-5 mt-8"
-                  type="checkbox"
-                  checked={ChangePass}
-                  onChange={handleChange}
-                />
-                <label>Change Password</label>
-              </label>
-              {ChangePass ? (
-                <AuthInput
-                  name="password"
-                  type="password"
-                  placeholder={["Password", ""]}
-                  register={register}
-                  error={errors?.password?.message}
-                />
-              ) : (
+              {user.googleSignIn ? (
                 ""
+              ) : (
+                <div>
+                  <label>
+                    <input
+                      className="mr-5 mt-8"
+                      type="checkbox"
+                      checked={ChangePass}
+                      onChange={handleChange}
+                    />
+                    <label>Change Password</label>
+                  </label>
+                  {ChangePass ? (
+                    <>
+                      <AuthInput
+                        name="currentPassword"
+                        type="password"
+                        placeholder={["Current Password", ""]}
+                        register={register}
+                        error={errors?.currentPassword?.message}
+                      />
+                      <AuthInput
+                        name="newPassword"
+                        type="password"
+                        placeholder={["New Password", ""]}
+                        register={register}
+                        error={errors?.newPassword?.message}
+                      />
+                      <AuthInput
+                        name="reNewPassword"
+                        type="password"
+                        placeholder={["ReEnter New Password", ""]}
+                        register={register}
+                        error={errors?.reNewPassword?.message}
+                      />
+                    </>
+                  ) : (
+                    ""
+                  )}
+                </div>
               )}
-              {/* Picture */}
-              <Picture
-                readablePicture={readablePicture}
-                setReadablePicture={setReadablePicture}
-                setPicture={setPicture}
-              />
+
               {/*if we have an error*/}
               {error ? (
                 <div>
@@ -177,7 +196,30 @@ function Profile() {
 export default Profile;
 
 {
-  /* <label
+  /* 
+  
+  <div class=" w-64">
+              <img
+                class="w-64 h-64 rounded-full"
+                src={user.picture}
+                alt={user.name}
+              />
+              <div class="w-64 h-64 group hover:bg-gray-200 opacity-60 rounded-full absolute flex justify-center items-center cursor-pointer transition duration-500">
+                <img
+                  class="hidden group-hover:block w-12"
+                  src="https://www.svgrepo.com/show/33565/upload.svg"
+                  alt=""
+                />
+              </div>
+            </div>
+  
+  
+  
+  
+  
+  
+  
+  <label
               class="block mb-2 mt-5 text-sm font-medium text-gray-900 dark:text-white"
               for="file_input"
             >

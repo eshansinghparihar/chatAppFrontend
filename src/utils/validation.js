@@ -25,13 +25,25 @@ export const updateSchema = Yup.object({
     .max(25, "Name must be between 2 and 16 characters."),
   email: Yup.string().email("Invalid email address."),
   status: Yup.string().max(64, "Status must be less than 64 characters."),
-  password:
+  currentPassword:
     Yup.string() === "undefined"
       ? ""
       : Yup.string().matches(
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
           "Password must contain atleast 6 characters, 1 uppercase, 1 lowercase, 1 number and 1 special character."
         ),
+  newPassword:
+    Yup.string() === "undefined"
+      ? ""
+      : Yup.string().matches(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
+          "Password must contain atleast 6 characters, 1 uppercase, 1 lowercase, 1 number and 1 special character."
+        ),
+
+  reNewPassword: Yup.string().oneOf(
+    [Yup.ref("newPassword"), null],
+    "Passwords must match"
+  ),
 });
 
 export const signInSchema = Yup.object({
