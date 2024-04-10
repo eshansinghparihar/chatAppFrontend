@@ -1,7 +1,5 @@
 import { useSelector } from "react-redux";
-import {
-  VideoCallIcon,
-} from "../../../svg";
+import { VideoCallIcon } from "../../../svg";
 import { capitalize } from "../../../utils/string";
 import { useEffect, useRef, useState } from "react";
 import SocketContext from "../../../context/SocketContext";
@@ -10,9 +8,15 @@ import {
   getConversationName,
   getConversationPicture,
 } from "../../../utils/chat";
+import GroupInfoModal from "./GroupInfoModal";
 function ChatHeader({ online, callUser, socket }) {
   const { activeConversation } = useSelector((state) => state.chat);
   const { user } = useSelector((state) => state.user);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleGroupInfo = () => {
+    setShowModal(true);
+  };
 
   return (
     <div className="h-[59px] dark:bg-dark_bg_6 flex items-center p16 select-none">
@@ -43,6 +47,14 @@ function ChatHeader({ online, callUser, socket }) {
                     )[0]
                   )}
             </h1>
+            {activeConversation.isGroup && (
+              <button
+                className="dark:text-white text-md "
+                onClick={handleGroupInfo}
+              >
+                Click here for group info
+              </button>
+            )}
             <span className="text-xs dark:text-dark_svg_2">
               {online ? "online" : ""}
             </span>
@@ -59,6 +71,13 @@ function ChatHeader({ online, callUser, socket }) {
           ) : null}
         </ul>
       </div>
+      {showModal && (
+        <GroupInfoModal
+          showModal={showModal}
+          setShowModal={setShowModal}
+          groupMembers={activeConversation.users}
+        />
+      )}
     </div>
   );
 }
