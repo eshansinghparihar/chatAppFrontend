@@ -48,12 +48,12 @@ function ChatHeader({ online, callUser, socket }) {
                   )}
             </h1>
             {activeConversation.isGroup && (
-              <span
+              <button
                 className="dark:text-white text-md "
                 onClick={handleGroupInfo}
               >
-                Group info
-              </span>
+                Click here for group info
+              </button>
             )}
             <span className="text-xs dark:text-dark_svg_2">
               {online ? "online" : ""}
