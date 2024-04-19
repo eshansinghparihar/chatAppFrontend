@@ -1,13 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ClipLoader } from "react-spinners";
 import { sendMessage } from "../../../features/chatSlice";
+import { sendEmailAsync } from '../../../features/emailSlice';
 import { SendIcon } from "../../../svg";
 import { Attachments } from "./attachments";
 import EmojiPickerApp from "./EmojiPicker";
 import Input from "./Input";
 import SocketContext from "../../../context/SocketContext";
-function ChatActions({ socket }) {
+import { checkOnlineStatus } from "../../../utils/chat";
+function ChatActions({ socket, onlineUsers }) {
   const dispatch = useDispatch();
   const [showPicker, setShowPicker] = useState(false);
   const [showAttachments, setShowAttachments] = useState(false);
@@ -23,9 +25,33 @@ function ChatActions({ socket }) {
     files: [],
     token,
   };
+
   const SendMessageHandler = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    /* TODO: Check if the participant is online
+    if participant is not online then we trigger an email for the participant
+    */
+
+    if(!checkOnlineStatus(onlineUsers, user, activeConversation.users))
+    {
+      console.log('Sending email since user offline')
+      try{
+      
+      const sender = activeConversation.latestMessage.sender.email
+      const messageText = message
+      const { email } = activeConversation.users.filter(user=> user.email !== sender)[0]
+      
+      await dispatch(sendEmailAsync({ sender, email, message: messageText }));
+      console.log('Email sent successfully!');
+      
+      }
+      catch (error) {
+        console.error('Failed to send email',error);
+      }
+    }
+
     let newMsg = await dispatch(sendMessage(values));
     socket.emit("send message", newMsg.payload);
     setMessage("");
