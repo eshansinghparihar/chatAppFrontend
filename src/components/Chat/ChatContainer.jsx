@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getConversationMessages } from "../../features/chatSlice";
-import { checkOnlineStatus, getConversationId } from "../../utils/chat";
+import { checkOnlineStatus } from "../../utils/chat";
 import { ChatActions } from "./actions";
 import ChatHeader from "./header/ChatHeader";
 import ChatMessages from "./messages/ChatMessages";
@@ -41,7 +41,7 @@ export default function ChatContainer({ onlineUsers, typing, callUser }) {
             {/*Chat messages*/}
             <ChatMessages typing={typing} />
             {/* Chat Actions */}
-            <ChatActions />
+            <ChatActions onlineUsers={onlineUsers}/>
           </>
         )}
       </div>
