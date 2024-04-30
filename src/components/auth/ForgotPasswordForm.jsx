@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import PulseLoader from "react-spinners/PulseLoader";
 import { signInSchema } from "../../utils/validation";
+import axios from "axios";
 import AuthInput from "./AuthInput";
 export default function RegisterForm() {
   const dispatch = useDispatch();
@@ -20,14 +21,24 @@ export default function RegisterForm() {
   } = useForm({
     resolver: yupResolver(signInSchema),
   });
-  const handleSubmit = async (e, values) => {
-    e.preventDefault();
 
-    // if email not present in db
-    // throw Error (user doesn't exist)
-    // else
-    setShowOtpField(true);
+  const [email, setEmail] = useState("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      console.log(
+        `ooo ${process.env.REACT_APP_API_ENDPOINT}/user/doesExist?email=${email}`
+      );
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API_ENDPOINT}/user/doesExist?email=${email}`
+      );
+      if (data) setShowOtpField(true);
+      else console.log("User does not exist!");
+    } catch (error) {
+      console.log(error.response.data.error.message);
+    }
   };
+
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
     // Handle OTP verification logic here
@@ -44,11 +55,15 @@ export default function RegisterForm() {
         </div>
         {/*Form*/}
         <form onSubmit={handleSubmit} className="mt-6 space-y-6">
-          <AuthInput
+          {/* <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-6"> */}
+          <input
+            className="w-full dark:bg-dark_bg_3 text-base py-2 px-4 rounded-lg outline-none"
             name="email"
             type="text"
+            value={email}
             placeholder={["Enter your registered email address", ""]}
             register={register}
+            onChange={(e) => setEmail(e.target.value)}
             error={errors?.email?.message}
           />
 
@@ -88,7 +103,7 @@ export default function RegisterForm() {
                 <p className="text-red-400">{error}</p>
               </div>
             ) : null}
-            
+
             <button
               className="w-full flex justify-center bg-blue-700 text-gray-100 p-4 rounded-full tracking-wide
           font-semibold focus:outline-none hover:bg-blue_1 shadow-lg cursor-pointer transition ease-in duration-300
