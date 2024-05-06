@@ -14,6 +14,7 @@ export default function RegisterForm() {
   const { state, err } = useSelector((state) => state);
   const [showOtpField, setShowOtpField] = useState(false);
   const [otp, setOtp] = useState("");
+  const [emailSentInfo, setEmailSentInfo] = useState(null);
   useEffect(() => {}, []);
   const {
     register,
@@ -26,23 +27,37 @@ export default function RegisterForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(
-        `ooo ${process.env.REACT_APP_API_ENDPOINT}/user/doesExist?email=${email}`
-      );
-      const { data } = await axios.get(
+      const { users } = await axios.get(
         `${process.env.REACT_APP_API_ENDPOINT}/user/doesExist?email=${email}`
       );
-      if (data) setShowOtpField(true);
-      else console.log("User does not exist!");
+      if (users !=[]) {
+        //send an otp to the enetered email address
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_ENDPOINT}/auth/sendEmail`,
+          {
+            email: `${email}`,
+          }
+        );
+        console.log("OTP sent successfully: ", response.data.otp);
+        setEmailSentInfo(response.data);
+        setShowOtpField(true);
+      } else console.log("User does not exist!");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleOtpSubmit = async (e) => {
+    e.preventDefault();
+    
+    // verify otp
+    try {
+      if (otp == emailSentInfo.otp) {
+        console.log("OTP matched");
+      }
     } catch (error) {
       console.log(error.response.data.error.message);
     }
-  };
-
-  const handleOtpSubmit = async (e) => {
-    e.preventDefault();
     // Handle OTP verification logic here
-    // verify otp
   };
 
   return (
@@ -61,7 +76,7 @@ export default function RegisterForm() {
             name="email"
             type="text"
             value={email}
-            placeholder={["Enter your registered email address", ""]}
+            placeholder={["Enter your registered email address"]}
             register={register}
             onChange={(e) => setEmail(e.target.value)}
             error={errors?.email?.message}
@@ -91,12 +106,15 @@ export default function RegisterForm() {
         </form>
         {showOtpField && (
           <form onSubmit={handleOtpSubmit} className="mt-6 space-y-6">
-            <AuthInput
-              name="OTP"
+            <input
+              className="w-full dark:bg-dark_bg_3 text-base py-2 px-4 rounded-lg outline-none"
+              name="otp"
               type="text"
-              placeholder={["Enter OTP", ""]}
+              value={otp}
+              placeholder={["Enter OTP"]}
               register={register}
-              error={errors?.email?.message}
+              onChange={(e) => setOtp(e.target.value)}
+              error={errors?.otp?.message}
             />
             {error ? (
               <div>
