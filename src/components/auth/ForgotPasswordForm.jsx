@@ -10,8 +10,8 @@ import AuthInput from "./AuthInput";
 export default function RegisterForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { status, error } = useSelector((state) => state.user);
-  const { state, err } = useSelector((state) => state);
+  const { status } = useSelector((state) => state.user);
+  const [error, setError] = useState(null);
   const [showOtpField, setShowOtpField] = useState(false);
   const [otp, setOtp] = useState("");
   const [emailSentInfo, setEmailSentInfo] = useState(null);
@@ -27,11 +27,14 @@ export default function RegisterForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { users } = await axios.get(
+      console.log(
+        "Calling: ${REACT_APP_API_ENDPOINT}/user/doesExist?email=${email}"
+      );
+      const { data } = await axios.get(
         `${process.env.REACT_APP_API_ENDPOINT}/user/doesExist?email=${email}`
       );
-      if (users !=[]) {
-        //send an otp to the enetered email address
+      if (data) {
+        //send an otp to the entered email address
         const response = await axios.post(
           `${process.env.REACT_APP_API_ENDPOINT}/auth/sendEmail`,
           {
@@ -41,18 +44,25 @@ export default function RegisterForm() {
         console.log("OTP sent successfully: ", response.data.otp);
         setEmailSentInfo(response.data);
         setShowOtpField(true);
-      } else console.log("User does not exist!");
+      } else {
+        console.log("User does not exist!");
+        setError({ invalidEmail: "User does not exist!" });
+      }
     } catch (error) {
       console.log(error);
     }
   };
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
-    
+
     // verify otp
     try {
       if (otp == emailSentInfo.otp) {
         console.log("OTP matched");
+        navigate(`/resetPassword?email=${email}`);
+      } else {
+        console.log("Invalid OTP!");
+        setError({ otp: "Invalid OTP!" });
       }
     } catch (error) {
       console.log(error.response.data.error.message);
@@ -75,32 +85,35 @@ export default function RegisterForm() {
             className="w-full dark:bg-dark_bg_3 text-base py-2 px-4 rounded-lg outline-none"
             name="email"
             type="text"
+            style={{ color: "white" }}
             value={email}
             placeholder={["Enter your registered email address"]}
             register={register}
             onChange={(e) => setEmail(e.target.value)}
-            error={errors?.email?.message}
+            error={error?.invalidEmail}
           />
 
           {/*if we have an error*/}
-          {error ? (
+          {error?.invalidEmail ? (
             <div>
-              <p className="text-red-400">{error}</p>
+              <p className="text-red-400">{error?.invalidEmail}</p>
             </div>
           ) : null}
           {/*Submit button*/}
-          <button
-            className="w-full flex justify-center bg-blue-700 text-gray-100 p-4 rounded-full tracking-wide
+          {!showOtpField && (
+            <button
+              className="w-full flex justify-center bg-blue-700 text-gray-100 p-4 rounded-full tracking-wide
           font-semibold focus:outline-none hover:bg-blue_1 shadow-lg cursor-pointer transition ease-in duration-300
           "
-            type="submit"
-          >
-            {status === "loading" ? (
-              <PulseLoader color="#fff" size={16} />
-            ) : (
-              "Submit"
-            )}
-          </button>
+              type="submit"
+            >
+              {status === "loading" ? (
+                <PulseLoader color="#fff" size={16} />
+              ) : (
+                "Submit"
+              )}
+            </button>
+          )}
 
           {/* Sign in link */}
         </form>
@@ -110,15 +123,16 @@ export default function RegisterForm() {
               className="w-full dark:bg-dark_bg_3 text-base py-2 px-4 rounded-lg outline-none"
               name="otp"
               type="text"
+              style={{ color: "white" }}
               value={otp}
               placeholder={["Enter OTP"]}
               register={register}
               onChange={(e) => setOtp(e.target.value)}
-              error={errors?.otp?.message}
+              error={error?.otp}
             />
-            {error ? (
+            {error?.otp ? (
               <div>
-                <p className="text-red-400">{error}</p>
+                <p className="text-red-400">{error?.otp}</p>
               </div>
             ) : null}
 
@@ -136,6 +150,7 @@ export default function RegisterForm() {
             </button>
           </form>
         )}
+
         <div className="mx-auto w-64 text-center text-white">
           <Link
             to="/login"
