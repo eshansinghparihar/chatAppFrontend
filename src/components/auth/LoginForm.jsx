@@ -9,7 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { loginUser, loginGoogleUser } from "../../features/userSlice";
 import { useGoogleLogin, use } from "@react-oauth/google";
 import axios from "axios";
-export default function RegisterForm() {
+export default function LoginForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { status, error } = useSelector((state) => state.user);

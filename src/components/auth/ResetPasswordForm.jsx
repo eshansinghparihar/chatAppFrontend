@@ -8,7 +8,7 @@ import PulseLoader from "react-spinners/PulseLoader";
 import { signInSchema } from "../../utils/validation";
 
 import { useLocation } from "react-router-dom";
-export default function RegisterForm() {
+export default function ResetPasswordForm() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();

@@ -7,7 +7,7 @@ import PulseLoader from "react-spinners/PulseLoader";
 import { signInSchema } from "../../utils/validation";
 import axios from "axios";
 import AuthInput from "./AuthInput";
-export default function RegisterForm() {
+export default function ForgotPasswordForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { status } = useSelector((state) => state.user);
