@@ -9,7 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { loginUser, loginGoogleUser } from "../../features/userSlice";
 import { useGoogleLogin, use } from "@react-oauth/google";
 import axios from "axios";
-export default function RegisterForm() {
+export default function LoginForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { status, error } = useSelector((state) => state.user);
@@ -94,6 +94,14 @@ export default function RegisterForm() {
           >
             Sign In With Google
           </button>
+          <p className="flex flex-col items-center justify-center mt-10 text-center text-md dark:text-dark_text_1">
+            <Link
+              to="/forgotPassword"
+              className=" hover:underline cursor-pointer transition ease-in duration-300"
+            >
+              Forgot password?
+            </Link>
+          </p>
           {/* Sign in link */}
           <p className="flex flex-col items-center justify-center mt-10 text-center text-md dark:text-dark_text_1">
             <span>you do not have an account ?</span>

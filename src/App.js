@@ -13,6 +13,8 @@ import Home from "./pages/home";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import ProfilePage from "./pages/profilePage";
+import ForgotPassword from "./pages/forgotPassword";
+import ResetPassword from "./pages/resetPassword";
 //socket io
 const socket = io(process.env.REACT_APP_API_ENDPOINT.split("/api/v1")[0]);
 
@@ -48,6 +50,16 @@ function App() {
               exact
               path="/profile"
               element={token ? <ProfilePage /> : <Navigate to="/" />}
+            />
+            <Route
+              exact
+              path="/forgotPassword"
+              element={<ForgotPassword />}
+            />
+            <Route
+              exact
+              path="/resetPassword"
+              element={<ResetPassword />}
             />
           </Routes>
         </Router>
