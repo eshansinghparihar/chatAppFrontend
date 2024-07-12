@@ -103,6 +103,7 @@ function Profile() {
                 placeholder={["Email", user.email]}
                 register={register}
                 error={errors?.email?.message}
+                readOnly={true}
               />
               <AuthInput
                 name="status"

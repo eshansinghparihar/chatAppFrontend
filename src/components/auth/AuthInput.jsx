@@ -5,6 +5,7 @@ export default function AuthInput({
   placeholder,
   register,
   error,
+  readOnly
 }) {
   const [val, setVal] = useState(placeholder[1]);
   const handleChange = (event) => {
@@ -22,6 +23,7 @@ export default function AuthInput({
         {...register(name)}
         value={val}
         onChange={handleChange}
+        readOnly={readOnly}
       />
       {error && <p className="text-red-400">{error}</p>}
     </div>
