@@ -118,21 +118,23 @@ export const chatSlice = createSlice({
       state.activeConversation = action.payload;
     },
     updateMessagesAndConversations: (state, action) => {
-      //update messages
-      let convo = state.activeConversation;
-      if (convo._id === action.payload.conversation._id) {
-        state.messages = [...state.messages, action.payload];
-      }
-      //update conversations
-      let conversation = {
-        ...action.payload.conversation,
-        latestMessage: action.payload,
-      };
-      let newConvos = [...state.conversations].filter(
-        (c) => c._id !== conversation._id
-      );
-      newConvos.unshift(conversation);
-      state.conversations = newConvos;
+      let updatedConversations = state.conversations.map(convo => {
+        if (convo._id === action.payload.conversation._id) {
+          // Update messages if the conversation matches
+          state.messages = [...state.messages, action.payload];
+          // Update the conversation with the latest message
+          return {
+            ...convo,
+            latestMessage: action.payload,
+          };
+        }
+        return convo;
+      });
+      // Ensure the updated conversation is at the beginning of the list
+      state.conversations = [
+        ...updatedConversations.filter(c => c._id !== action.payload.conversation._id),
+        updatedConversations.find(c => c._id === action.payload.conversation._id),
+      ];
     },
     addFiles: (state, action) => {
       state.files = [...state.files, action.payload];
