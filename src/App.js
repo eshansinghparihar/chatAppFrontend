@@ -17,6 +17,7 @@ import ForgotPassword from "./pages/forgotPassword";
 import ResetPassword from "./pages/resetPassword";
 //socket io
 const socket = io(process.env.REACT_APP_API_ENDPOINT.split("/api/v1")[0]);
+console.log('Socket : ',socket)
 
 function App() {
   //const [connected, setConnected] = useState(false);
